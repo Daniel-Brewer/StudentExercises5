@@ -30,7 +30,7 @@ namespace StudentExercises5.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             using (SqlConnection conn = Connection)
             {
@@ -101,14 +101,15 @@ namespace StudentExercises5.Controllers
         }
 
         [HttpGet("{id}", Name = "GetCohort")]
-        public async Task<IActionResult> Get([FromRoute] int id)
+        public IActionResult Get([FromRoute] int id)
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT c.Id as CohortId, s.Id as sId, s.CohortId as sCohortId, c.Name, s.FirstName, s.LastName, i.FirstName as iFirstName, i.LastName as iLastName, i.CohortId as iCohortId, i.Id as iId FROM Cohort c JOIN Student s ON s.CohortId = c.Id JOIN Instructor i on i.CohortId = c.Id WHERE c.Id = @id";
+                    cmd.CommandText = "SELECT c.Id as CohortId, s.Id as sId, s.CohortId as sCohortId, c.Name, s.FirstName, s.LastName, i.FirstName as iFirstName, i.LastName as iLastName, i.CohortId as iCohortId, i.Id as iId " +
+                        "FROM Cohort c JOIN Student s ON s.CohortId = c.Id JOIN Instructor i on i.CohortId = c.Id WHERE c.Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -172,7 +173,7 @@ namespace StudentExercises5.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Cohort cohort)
+        public IActionResult Post([FromBody] Cohort cohort)
         {
             using (SqlConnection conn = Connection)
             {
@@ -229,7 +230,7 @@ namespace StudentExercises5.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {
